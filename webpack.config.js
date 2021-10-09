@@ -1,3 +1,5 @@
+const HappyPack = require("happypack");
+
 module.exports = {
     mode: "production",
     entry: "./src/index.ts",
@@ -5,11 +7,25 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: "ts-loader",
+                use: `happypack/loader?id=ts`,
             },
         ],
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
     },
+    plugins: [
+        new HappyPack({
+            id: "ts",
+            threads: 2,
+            use: [
+                {
+                    path: "ts-loader",
+                    query: {
+                        happyPackMode: true,
+                    },
+                },
+            ],
+        }),
+    ],
 };
